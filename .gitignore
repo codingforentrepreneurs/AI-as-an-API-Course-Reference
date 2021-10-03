@@ -1,3 +1,5 @@
+*.pkl
+datasets/exports/*.json
 .DS_Store
 datasets/spam-classifier/
 datasets/zips/
