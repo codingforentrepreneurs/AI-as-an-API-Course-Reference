@@ -3,8 +3,12 @@ import pathlib
 from typing import Optional
 from fastapi import FastAPI
 
+from cassandra.cqlengine.management import sync_table
+
 from . import (
-    config, 
+    config,
+    db, 
+    models,
     ml
 )
 
@@ -20,15 +24,20 @@ TOKENIZER_PATH = SMS_SPAM_MODEL_DIR / "spam-classifer-tokenizer.json"
 METADATA_PATH = SMS_SPAM_MODEL_DIR / "spam-classifer-metadata.json"
 
 AI_MODEL = None
+DB_SESSION = None
+SMSInference = models.SMSInference
 
 @app.on_event("startup")
 def on_startup():
-    global AI_MODEL
+    global AI_MODEL, DB_SESSION
     AI_MODEL = ml.AIModel(
         model_path= MODEL_PATH,
         tokenizer_path = TOKENIZER_PATH,
         metadata_path = METADATA_PATH
     )
+    DB_SESSION = db.get_session()
+    sync_table(SMSInference)
+    
 
 @app.get("/") # /?q=this is awesome
 def read_index(q:Optional[str] = None):
