@@ -44,5 +44,14 @@ def read_index(q:Optional[str] = None):
     global AI_MODEL
     query = q or "hello world" # 280
     preds_dict = AI_MODEL.predict_text(query)
+    top = preds_dict.get('top') # {label: , conf}
+    data = {"query": query, **top}
+    obj = SMSInference.objects.create(**data)
     # NoSQL -> cassandra -> DataStax AstraDB
-    return {"query": query, "results": preds_dict}
+    return obj
+
+
+@app.get("/inferences/{my_uuid}") # /?q=this is awesome
+def read_inference(my_uuid):
+    obj = SMSInference.objects.get(uuid=my_uuid)
+    return obj
