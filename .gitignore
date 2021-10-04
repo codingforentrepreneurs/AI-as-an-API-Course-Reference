@@ -1,3 +1,4 @@
+app/ignored/
 models/
 *.pkl
 datasets/exports/*.json
