@@ -1,10 +1,15 @@
+import os
 import pathlib
 from typing import Optional
 from fastapi import FastAPI
 
-from . import ml
+from . import (
+    config, 
+    ml
+)
 
 app = FastAPI()
+settings = config.get_settings()
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 
@@ -28,6 +33,7 @@ def on_startup():
 @app.get("/") # /?q=this is awesome
 def read_index(q:Optional[str] = None):
     global AI_MODEL
-    query = q or "hello world"
+    query = q or "hello world" # 280
     preds_dict = AI_MODEL.predict_text(query)
+    # NoSQL -> cassandra -> DataStax AstraDB
     return {"query": query, "results": preds_dict}
