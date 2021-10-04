@@ -9,3 +9,4 @@ class SMSInference(Model):
     query = columns.Text()
     label = columns.Text()
     confidence = columns.Float()
+    model_version = columns.Text(default='v1')
