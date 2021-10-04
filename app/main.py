@@ -42,11 +42,11 @@ def on_startup():
     sync_table(SMSInference)
     
 
-@app.get("/") # /?q=this is awesome
+@app.get("/")
 def read_index(q:Optional[str] = None):
     return {"hello": "world"}
 
-@app.post("/") # /?q=this is awesome
+@app.post("/")
 def create_inference(query:schema.Query):
     global AI_MODEL
     preds_dict = AI_MODEL.predict_text(query.q)
