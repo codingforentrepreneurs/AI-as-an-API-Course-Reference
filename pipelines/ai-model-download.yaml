@@ -1,0 +1,30 @@
+context_parser: pypyr.parser.keyvaluepairs
+steps:
+  - name: pypyr.steps.contextsetf
+    in:
+      contextSetf:
+        local_dest_dir: models/spam-sms
+        file_keys: [
+          "exports/spam-sms/spam-classifer-metadata.json",
+          "exports/spam-sms/spam-classifer-tokenizer.json",
+          "exports/spam-sms/spam-model.h5",
+        ]
+  - name: pypyr.steps.py
+    in:
+      py: |
+        import boto3
+        import os
+        import pathlib
+        from dotenv import load_dotenv
+        load_dotenv()
+        dest_path = pathlib.Path(local_dest_dir).resolve()
+        dest_path.mkdir(exist_ok=True, parents=True)
+        session = boto3.session.Session()
+        bucket_name = os.environ.get("BUCKET_NAME")
+        region = os.environ.get("REGION_NAME")
+        endpoint_url = os.environ.get("ENDPOINT_URL") or None
+        client = session.client('s3', region_name=region, endpoint_url=endpoint_url)
+        for key in file_keys:
+            fname = pathlib.Path(key).name
+            dl_path = dest_path / fname
+            client.download_file(bucket_name, key, str(dl_path))

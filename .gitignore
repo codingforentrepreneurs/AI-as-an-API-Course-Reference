@@ -1,3 +1,4 @@
+models/
 *.pkl
 datasets/exports/*.json
 .DS_Store
