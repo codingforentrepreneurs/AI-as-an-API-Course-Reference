@@ -11,7 +11,8 @@ from . import (
     config,
     db, 
     models,
-    ml
+    ml,
+    schema
 )
 
 app = FastAPI()
@@ -43,11 +44,14 @@ def on_startup():
 
 @app.get("/") # /?q=this is awesome
 def read_index(q:Optional[str] = None):
+    return {"hello": "world"}
+
+@app.post("/") # /?q=this is awesome
+def create_inference(query:schema.Query):
     global AI_MODEL
-    query = q or "hello world" # 280
-    preds_dict = AI_MODEL.predict_text(query)
+    preds_dict = AI_MODEL.predict_text(query.q)
     top = preds_dict.get('top') # {label: , conf}
-    data = {"query": query, **top}
+    data = {"query": query.q, **top}
     obj = SMSInference.objects.create(**data)
     # NoSQL -> cassandra -> DataStax AstraDB
     return obj
