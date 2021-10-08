@@ -9,7 +9,7 @@ repos:
 -   repo: local
     hooks:
     -   id: encrypt-pipeline
-        name: PyTest Runner
+        name: Pypyr Encryption Runner
         entry: pypyr pipelines/encrypt
         language: python
         pass_filenames: false
