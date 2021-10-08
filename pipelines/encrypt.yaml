@@ -1,0 +1,14 @@
+steps:
+  - name: pypyr.steps.pyimport
+    in:
+      pyImport: |
+        from app import encrypt
+  - name: pypyr.steps.set
+    in:
+      set:
+        toEncrypt:
+          - input_dir: app/ignored
+            output_dir: app/encrypted
+  - name: pypyr.steps.py
+    run: !py encrypt.encrypt_dir(i["input_dir"], i["output_dir"])
+    foreach: "{toEncrypt}"

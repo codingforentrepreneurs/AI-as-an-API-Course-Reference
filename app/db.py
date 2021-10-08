@@ -5,7 +5,11 @@ from cassandra.auth import PlainTextAuthProvider
 from cassandra.cqlengine import connection
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
-CLUSTER_BUNDLE = str(BASE_DIR / 'ignored' / 'astradb_connect.zip')
+SOURCE_DIR = BASE_DIR / 'ignored'
+if not SOURCE_DIR.exists():
+    SOURCE_DIR = BASE_DIR / 'decrypted'
+
+CLUSTER_BUNDLE = str( SOURCE_DIR / 'astradb_connect.zip')
 
 settings = config.get_settings()
 

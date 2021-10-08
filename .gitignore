@@ -1,4 +1,5 @@
 app/ignored/
+app/decrypted/
 models/
 *.pkl
 datasets/exports/*.json
