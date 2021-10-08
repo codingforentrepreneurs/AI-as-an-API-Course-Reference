@@ -17,4 +17,4 @@ RUN /opt/venv/bin/python -m pypyr /app/pipelines/ai-model-download
 
 RUN /opt/venv/bin/python -m pypyr /app/pipelines/decrypt
 
-CMD [ "entrypoint.sh" ]
+CMD [ "./entrypoint.sh" ]
